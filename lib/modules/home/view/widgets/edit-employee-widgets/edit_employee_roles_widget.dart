@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:realtime_innovation_assignment/injection/injection.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_bloc.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_event.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_state.dart';
@@ -12,8 +13,7 @@ class EditEmployeeRolesWidget extends StatefulWidget {
   const EditEmployeeRolesWidget({super.key, required this.selectedRole});
   final String selectedRole;
   @override
-  State<EditEmployeeRolesWidget> createState() =>
-      _EditEmployeeRolesWidgetState();
+  State<EditEmployeeRolesWidget> createState() => _EditEmployeeRolesWidgetState();
 }
 
 class _EditEmployeeRolesWidgetState extends State<EditEmployeeRolesWidget> {
@@ -27,7 +27,7 @@ class _EditEmployeeRolesWidgetState extends State<EditEmployeeRolesWidget> {
   @override
   void initState() {
     selectedRole = widget.selectedRole;
-    context.read<HomeBloc>().add(DropDownChanged(selectedRole));
+    getIt<HomeBloc>().add(DropDownChanged(selectedRole));
     setState(() {});
     super.initState();
   }
@@ -69,9 +69,7 @@ class _EditEmployeeRolesWidgetState extends State<EditEmployeeRolesWidget> {
                             padding: EdgeInsets.only(bottom: 10.h),
                             child: InkWell(
                               onTap: () {
-                                context
-                                    .read<HomeBloc>()
-                                    .add(DropDownChanged(data));
+                                getIt<HomeBloc>().add(DropDownChanged(data));
 
                                 if (context.mounted) {
                                   AutoRouter.of(context).pop();
@@ -82,8 +80,7 @@ class _EditEmployeeRolesWidgetState extends State<EditEmployeeRolesWidget> {
                                 children: [
                                   Text(
                                     data,
-                                    style: subHeadingStyle.copyWith(
-                                        color: darkTextColor),
+                                    style: subHeadingStyle.copyWith(color: darkTextColor),
                                   ),
                                   SizedBox(height: 10.h),
                                   Divider(
@@ -126,9 +123,7 @@ class _EditEmployeeRolesWidgetState extends State<EditEmployeeRolesWidget> {
                     Text(
                       state.selectedRole ?? selectedRole,
                       style: subHeadingStyle.copyWith(
-                        color: state.selectedRole == "Select role"
-                            ? lightTextColor
-                            : darkTextColor,
+                        color: state.selectedRole == "Select role" ? lightTextColor : darkTextColor,
                       ),
                     ),
                     const Spacer(),

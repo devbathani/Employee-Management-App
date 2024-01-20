@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:realtime_innovation_assignment/gen/assets.gen.dart';
+import 'package:realtime_innovation_assignment/injection/injection.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_bloc.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_event.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_state.dart';
@@ -58,21 +59,13 @@ class _CurrentDateWidgetState extends State<CurrentDateWidget> {
                           return InkWell(
                             onTap: () {
                               if (index == 0) {
-                                context
-                                    .read<HomeBloc>()
-                                    .add(const AddTodayDate(true));
+                                getIt<HomeBloc>().add(const AddTodayDate(true));
                               } else if (index == 1) {
-                                context
-                                    .read<HomeBloc>()
-                                    .add(AddNextMondayDate());
+                                getIt<HomeBloc>().add(AddNextMondayDate());
                               } else if (index == 2) {
-                                context
-                                    .read<HomeBloc>()
-                                    .add(AddNextTuesdayDate());
+                                getIt<HomeBloc>().add(AddNextTuesdayDate());
                               } else {
-                                context
-                                    .read<HomeBloc>()
-                                    .add(AddAfterOneWeekDate());
+                                getIt<HomeBloc>().add(AddAfterOneWeekDate());
                               }
                             },
                             child: Container(
@@ -89,8 +82,7 @@ class _CurrentDateWidgetState extends State<CurrentDateWidget> {
                                           : index == 2
                                               ? "Next Tuesday"
                                               : "After 1 week",
-                                  style: subHeadingStyle.copyWith(
-                                      color: blueColor, fontSize: 14.sp),
+                                  style: subHeadingStyle.copyWith(color: blueColor, fontSize: 14.sp),
                                 ),
                               ),
                             ),
@@ -138,11 +130,11 @@ class _CurrentDateWidgetState extends State<CurrentDateWidget> {
                       setState(() {
                         _focusedDay = focusedDay;
                         _selectedDay = selectedDay;
-                        context.read<HomeBloc>().add(
-                              AddCurrentDate(
-                                DateFormat('dd MMM, yyyy').format(selectedDay),
-                              ),
-                            );
+                        getIt<HomeBloc>().add(
+                          AddCurrentDate(
+                            DateFormat('dd MMM, yyyy').format(selectedDay),
+                          ),
+                        );
                       });
                     },
                   ),
@@ -201,9 +193,7 @@ class _CurrentDateWidgetState extends State<CurrentDateWidget> {
                               child: Container(
                                 height: 40.h,
                                 width: 60.w,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(6.r),
-                                    color: blueColor),
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(6.r), color: blueColor),
                                 child: Center(
                                   child: Text(
                                     "Save",

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:realtime_innovation_assignment/injection/injection.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_bloc.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_event.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_state.dart';
@@ -24,16 +25,11 @@ class _EmployeesListWidgetState extends State<EmployeesListWidget> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomeBloc, HomeState>(
-      listener: (context, state) {
-        if (state.isStateUpdated) {
-          context.read<HomeBloc>().add(const UpdateStateEvent(false));
-          context.read<HomeBloc>().add(HomeInitizalize());
-          showUndoMessanger("Employee date deleted successfully", context);
-        }
-      },
+      bloc: getIt<HomeBloc>(),
+      listener: (context, state) {},
       builder: (context, state) {
         return Container(
-          height: 240.h,
+          height: 200.h,
           width: MediaQuery.sizeOf(context).width,
           color: Colors.white,
           child: ListView.builder(
@@ -53,9 +49,9 @@ class _EmployeesListWidgetState extends State<EmployeesListWidget> {
                       SlidableAction(
                         flex: 2,
                         onPressed: (context) async {
-                          context
-                              .read<HomeBloc>()
-                              .add(DeleteEmployee(data.id!));
+                          getIt<HomeBloc>().add(DeleteEmployee(data.id!));
+                          showUndoMessanger(
+                              "Employee data has been deleted", context);
                         },
                         backgroundColor: Colors.red,
                         foregroundColor: Colors.white,

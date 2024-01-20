@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:realtime_innovation_assignment/gen/assets.gen.dart';
+import 'package:realtime_innovation_assignment/injection/injection.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_bloc.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_state.dart';
 import 'package:realtime_innovation_assignment/modules/home/view/widgets/current_date_widget.dart';
@@ -22,6 +23,7 @@ class _AddDatesWidgetState extends State<AddDatesWidget> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
+      bloc: getIt<HomeBloc>(),
       builder: (context, state) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -55,11 +57,7 @@ class _AddDatesWidgetState extends State<AddDatesWidget> {
                         SvgPicture.asset(Assets.icons.calendarIcon),
                         SizedBox(width: 10.w),
                         Text(
-                          state.currentDate ==
-                                  DateFormat('dd MMM, yyyy')
-                                      .format(DateTime.now())
-                              ? "Today"
-                              : state.currentDate!,
+                          state.currentDate == DateFormat('dd MMM, yyyy').format(DateTime.now()) ? "Today" : state.currentDate!,
                           style: subHeadingStyle.copyWith(
                             fontSize: 14.sp,
                           ),

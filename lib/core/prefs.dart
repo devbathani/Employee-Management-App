@@ -2,7 +2,7 @@
 import 'dart:developer';
 
 import 'package:realtime_innovation_assignment/injection/injection.dart';
-import 'package:realtime_innovation_assignment/utils/logger.dart';
+import 'package:realtime_innovation_assignment/modules/home/bloc/home_bloc.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 class AppPrefs {
@@ -60,12 +60,9 @@ class PrefsConstants {
   static const String employeeData = 'employee_data';
 }
 
-/// Making AppPrefs injectable
 Future<void> setupLocator() async {
   final preferences = await StreamingSharedPreferences.instance;
-  getIt.registerLazySingleton<AppPrefs>(() => AppPrefs(preferences));
-
-  logger.w("Registering App Router");
-
-  logger.w("Registerd App Router");
+  getIt
+    ..registerLazySingleton<AppPrefs>(() => AppPrefs(preferences))
+    ..registerSingleton(HomeBloc());
 }

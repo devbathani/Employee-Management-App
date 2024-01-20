@@ -1,16 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:realtime_innovation_assignment/core/database.dart';
+import 'package:realtime_innovation_assignment/injection/injection.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_event.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_state.dart';
 import 'package:realtime_innovation_assignment/modules/home/model/employee_entity.dart';
 import 'package:realtime_innovation_assignment/utils/logger.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  List<EmployeeEntity> employeeListData = [];
   final dbHelper = EmployeeDatabaseHelper();
   HomeBloc() : super(HomeState.initial()) {
     on<HomeInitizalize>((event, emit) async {
+      emit(state.copyWith(isLoading: true));
       logger.f("Checking");
       final employees = await dbHelper.getEmployees();
       final List<EmployeeEntity> employeeListDate =
@@ -27,20 +28,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         }
       }
 
-      if (employeeListDate.isEmpty) {
-        emit(
-          state.copyWith(isLoading: true),
-        );
-      } else {
-        logger.i(employeeListDate);
-        emit(
-          state.copyWith(
-            cureentEmployeeDataList: currentEmployeeData,
-            previousEmployeeDataList: previousEmployeeData,
-            isLoading: false,
-          ),
-        );
-      }
+      logger.i(employeeListDate);
+      emit(
+        state.copyWith(
+          employeeDataList: employeeListDate,
+          cureentEmployeeDataList: currentEmployeeData,
+          previousEmployeeDataList: previousEmployeeData,
+          isLoading: false,
+        ),
+      );
     });
 
     on<AddEmployee>((event, emit) async {
@@ -57,15 +53,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       await dbHelper.deleteEmployee(event.employeeId);
       emit(state.copyWith(isStateUpdated: true));
       logger.i("Deleted successfully");
-    });
-    on<UpdateStateEvent>((event, emit) async {
-      emit(state.copyWith(isStateUpdated: event.updateState));
+      getIt<HomeBloc>().add(HomeInitizalize());
     });
 
     on<UndoDeleteEmployeeEvent>((event, emit) async {
       await dbHelper.undoDelete();
-      emit(state.copyWith(isStateUpdated: true));
       logger.i("Undo Deleted successfully");
+      getIt<HomeBloc>().add(HomeInitizalize());
     });
 
     on<DropDownChanged>((event, emit) async {

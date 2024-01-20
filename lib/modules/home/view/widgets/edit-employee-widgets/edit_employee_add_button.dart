@@ -4,7 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
+import 'package:realtime_innovation_assignment/injection/injection.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_bloc.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_event.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_state.dart';
@@ -15,14 +15,12 @@ import 'package:realtime_innovation_assignment/utils/scaffold_messanger.dart';
 import 'package:realtime_innovation_assignment/utils/text_styles.dart';
 
 class EditEmployeeButtonWidget extends StatefulWidget {
-  const EditEmployeeButtonWidget(
-      {super.key, required this.employeeName, required this.employeeId});
+  const EditEmployeeButtonWidget({super.key, required this.employeeName, required this.employeeId});
   final String employeeName;
   final String employeeId;
 
   @override
-  State<EditEmployeeButtonWidget> createState() =>
-      _EditEmployeeButtonWidgetState();
+  State<EditEmployeeButtonWidget> createState() => _EditEmployeeButtonWidgetState();
 }
 
 class _EditEmployeeButtonWidgetState extends State<EditEmployeeButtonWidget> {
@@ -76,38 +74,29 @@ class _EditEmployeeButtonWidgetState extends State<EditEmployeeButtonWidget> {
                       } else if (state.selectedRole == null) {
                         showMessanger("Please add employee's role", context);
                       } else {
-                        context.read<HomeBloc>().add(
-                              UpdateEmployee(
-                                EmployeeEntity(
-                                  employeeName: widget.employeeName,
-                                  employeeRole: state.selectedRole,
-                                  currentDate: state.currentDate,
-                                  previousDate: state.previousDate,
-                                  id: widget.employeeId,
-                                ),
-                              ),
-                            );
+                        getIt<HomeBloc>().add(
+                          UpdateEmployee(
+                            EmployeeEntity(
+                              employeeName: widget.employeeName,
+                              employeeRole: state.selectedRole,
+                              currentDate: state.currentDate,
+                              previousDate: state.previousDate,
+                              id: widget.employeeId,
+                            ),
+                          ),
+                        );
                         if (context.mounted) {
-                          showMessanger(
-                              "Employee updated successfully", context);
+                          showMessanger("Employee updated successfully", context);
                         }
-                        context
-                            .read<HomeBloc>()
-                            .add(const DropDownChanged("Select role"));
-                        context.read<HomeBloc>().add(AddCurrentDate(
-                            DateFormat('dd MMM, yyyy').format(DateTime.now())));
-                        context
-                            .read<HomeBloc>()
-                            .add(const AddPreviousDate("No date"));
+
                         AutoRouter.of(context).push(const HomeRoute());
+                        setState(() {});
                       }
                     },
                     child: Container(
                       height: 40.h,
                       width: 75.w,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6.r),
-                          color: blueColor),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(6.r), color: blueColor),
                       child: Center(
                         child: Text(
                           "Save",

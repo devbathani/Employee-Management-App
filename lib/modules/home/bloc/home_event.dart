@@ -36,15 +36,6 @@ class PreviousDateEvent extends HomeEvent {
   List<Object> get props => [selectedDate];
 }
 
-class UpdateStateEvent extends HomeEvent {
-  final bool updateState;
-
-  const UpdateStateEvent(this.updateState);
-
-  @override
-  List<Object> get props => [updateState];
-}
-
 class AddEmployee extends HomeEvent {
   final EmployeeEntity employeeEntity;
   const AddEmployee(this.employeeEntity);

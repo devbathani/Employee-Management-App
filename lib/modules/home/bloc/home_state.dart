@@ -11,6 +11,7 @@ class HomeState extends Equatable {
   final String? previousDate;
   final String? selectedRole;
   final List<EmployeeEntity> cureentEmployeeDataList;
+  final List<EmployeeEntity> employeeDataList;
   final List<EmployeeEntity> previousEmployeeDataList;
 
   const HomeState({
@@ -20,16 +21,12 @@ class HomeState extends Equatable {
     this.previousDate,
     this.selectedRole,
     required this.cureentEmployeeDataList,
+    required this.employeeDataList,
     required this.previousEmployeeDataList,
   });
   @override
-  List<Object?> get props => [
-        isLoading,
-        isStateUpdated,
-        currentDate,
-        previousDate,
-        selectedRole,
-      ];
+  List<Object?> get props =>
+      [isLoading, currentDate, previousDate, selectedRole];
 
   HomeState copyWith({
     bool? isLoading,
@@ -38,6 +35,7 @@ class HomeState extends Equatable {
     String? previousDate,
     String? selectedRole,
     List<EmployeeEntity>? cureentEmployeeDataList,
+    List<EmployeeEntity>? employeeDataList,
     List<EmployeeEntity>? previousEmployeeDataList,
   }) {
     return HomeState(
@@ -48,6 +46,7 @@ class HomeState extends Equatable {
       selectedRole: selectedRole ?? this.selectedRole,
       cureentEmployeeDataList:
           cureentEmployeeDataList ?? this.cureentEmployeeDataList,
+      employeeDataList: employeeDataList ?? this.employeeDataList,
       previousEmployeeDataList:
           previousEmployeeDataList ?? this.previousEmployeeDataList,
     );
@@ -59,6 +58,7 @@ class HomeState extends Equatable {
       isStateUpdated: false,
       cureentEmployeeDataList: const [],
       previousEmployeeDataList: const [],
+      employeeDataList: const [],
       currentDate: DateFormat('dd MMM, yyyy').format(DateTime.now()),
       previousDate: "No date",
     );

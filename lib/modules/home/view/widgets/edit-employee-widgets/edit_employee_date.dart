@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:realtime_innovation_assignment/gen/assets.gen.dart';
+import 'package:realtime_innovation_assignment/injection/injection.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_bloc.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_event.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_state.dart';
@@ -13,8 +14,7 @@ import 'package:realtime_innovation_assignment/utils/colors.dart';
 import 'package:realtime_innovation_assignment/utils/text_styles.dart';
 
 class EditDatesWidget extends StatefulWidget {
-  const EditDatesWidget(
-      {super.key, required this.currentDate, required this.previousDate});
+  const EditDatesWidget({super.key, required this.currentDate, required this.previousDate});
   final String currentDate;
   final String previousDate;
 
@@ -25,8 +25,8 @@ class EditDatesWidget extends StatefulWidget {
 class _EditDatesWidgetState extends State<EditDatesWidget> {
   @override
   void initState() {
-    context.read<HomeBloc>().add(AddCurrentDate(widget.currentDate));
-    context.read<HomeBloc>().add(AddPreviousDate(widget.previousDate));
+    getIt<HomeBloc>().add(AddCurrentDate(widget.currentDate));
+    getIt<HomeBloc>().add(AddPreviousDate(widget.previousDate));
     setState(() {});
     super.initState();
   }
@@ -67,11 +67,7 @@ class _EditDatesWidgetState extends State<EditDatesWidget> {
                         SvgPicture.asset(Assets.icons.calendarIcon),
                         SizedBox(width: 10.w),
                         Text(
-                          state.currentDate ==
-                                  DateFormat('dd MMM, yyyy')
-                                      .format(DateTime.now())
-                              ? "Today"
-                              : state.currentDate!,
+                          state.currentDate == DateFormat('dd MMM, yyyy').format(DateTime.now()) ? "Today" : state.currentDate!,
                           style: subHeadingStyle.copyWith(
                             fontSize: 14.sp,
                           ),

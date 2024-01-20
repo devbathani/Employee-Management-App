@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:realtime_innovation_assignment/injection/injection.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_bloc.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_event.dart';
 import 'package:realtime_innovation_assignment/modules/home/bloc/home_state.dart';
@@ -20,8 +21,7 @@ class AddEmployeeButtonWidget extends StatefulWidget {
   final String employeeName;
 
   @override
-  State<AddEmployeeButtonWidget> createState() =>
-      _AddEmployeeButtonWidgetState();
+  State<AddEmployeeButtonWidget> createState() => _AddEmployeeButtonWidgetState();
 }
 
 class _AddEmployeeButtonWidgetState extends State<AddEmployeeButtonWidget> {
@@ -75,38 +75,32 @@ class _AddEmployeeButtonWidgetState extends State<AddEmployeeButtonWidget> {
                       } else if (state.selectedRole == null) {
                         showMessanger("Please add employee's role", context);
                       } else {
-                        context.read<HomeBloc>().add(
-                              AddEmployee(
-                                EmployeeEntity(
-                                  employeeName: widget.employeeName,
-                                  employeeRole: state.selectedRole,
-                                  currentDate: state.currentDate,
-                                  previousDate: state.previousDate,
-                                  id: const Uuid().v1(),
-                                ),
-                              ),
-                            );
+                        getIt<HomeBloc>().add(
+                          AddEmployee(
+                            EmployeeEntity(
+                              employeeName: widget.employeeName,
+                              employeeRole: state.selectedRole,
+                              currentDate: state.currentDate,
+                              previousDate: state.previousDate,
+                              id: const Uuid().v1(),
+                            ),
+                          ),
+                        );
                         if (context.mounted) {
                           showMessanger("Employee added successfully", context);
                         }
-                        context
-                            .read<HomeBloc>()
-                            .add(const DropDownChanged("Select role"));
-                        context.read<HomeBloc>().add(AddCurrentDate(
-                            DateFormat('dd MMM, yyyy').format(DateTime.now())));
-                        context
-                            .read<HomeBloc>()
-                            .add(const AddPreviousDate("No date"));
+                        getIt<HomeBloc>().add(const DropDownChanged("Select role"));
+                        getIt<HomeBloc>().add(AddCurrentDate(DateFormat('dd MMM, yyyy').format(DateTime.now())));
+                        getIt<HomeBloc>().add(const AddPreviousDate("No date"));
 
                         AutoRouter.of(context).push(const HomeRoute());
+                        setState(() {});
                       }
                     },
                     child: Container(
                       height: 40.h,
                       width: 75.w,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6.r),
-                          color: blueColor),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(6.r), color: blueColor),
                       child: Center(
                         child: Text(
                           "Save",

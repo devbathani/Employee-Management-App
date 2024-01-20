@@ -12,6 +12,8 @@ import 'package:realtime_innovation_assignment/utils/colors.dart';
 import 'package:realtime_innovation_assignment/utils/text_styles.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../../../injection/injection.dart';
+
 class PreviousDateWidget extends StatefulWidget {
   const PreviousDateWidget({super.key});
 
@@ -58,13 +60,9 @@ class _PreviousDateWidgetState extends State<PreviousDateWidget> {
                           return InkWell(
                             onTap: () {
                               if (index == 0) {
-                                context
-                                    .read<HomeBloc>()
-                                    .add(const AddPreviousDate("No date"));
+                                getIt<HomeBloc>().add(const AddPreviousDate("No date"));
                               } else if (index == 1) {
-                                context
-                                    .read<HomeBloc>()
-                                    .add(const AddTodayDate(false));
+                                getIt<HomeBloc>().add(const AddTodayDate(false));
                               }
                             },
                             child: Container(
@@ -75,8 +73,7 @@ class _PreviousDateWidgetState extends State<PreviousDateWidget> {
                               child: Center(
                                 child: Text(
                                   index == 0 ? "No date" : "Today",
-                                  style: subHeadingStyle.copyWith(
-                                      color: blueColor, fontSize: 14.sp),
+                                  style: subHeadingStyle.copyWith(color: blueColor, fontSize: 14.sp),
                                 ),
                               ),
                             ),
@@ -124,11 +121,11 @@ class _PreviousDateWidgetState extends State<PreviousDateWidget> {
                       setState(() {
                         _focusedDay = focusedDay;
                         _selectedDay = selectedDay;
-                        context.read<HomeBloc>().add(
-                              AddPreviousDate(
-                                DateFormat('dd MMM, yyyy').format(selectedDay),
-                              ),
-                            );
+                        getIt<HomeBloc>().add(
+                          AddPreviousDate(
+                            DateFormat('dd MMM, yyyy').format(selectedDay),
+                          ),
+                        );
                       });
                     },
                   ),
@@ -187,9 +184,7 @@ class _PreviousDateWidgetState extends State<PreviousDateWidget> {
                               child: Container(
                                 height: 40.h,
                                 width: 60.w,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(6.r),
-                                    color: blueColor),
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(6.r), color: blueColor),
                                 child: Center(
                                   child: Text(
                                     "Save",
